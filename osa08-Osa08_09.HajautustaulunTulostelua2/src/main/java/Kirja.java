@@ -11,9 +11,7 @@ public class Kirja {
         this.sisalto = sisalto;
     }
 
-    public String getNimi() {
-        return this.nimi;
-    }
+    public String getNimi() { return this.nimi; }
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
