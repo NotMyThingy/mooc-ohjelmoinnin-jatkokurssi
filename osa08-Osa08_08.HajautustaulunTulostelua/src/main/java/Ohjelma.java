@@ -24,6 +24,9 @@ public class Ohjelma {
         }
     }
 
+    /*
+     * tulostaa parametrina annetun hajautustaulun avaimista ne, jotka sisältävät parametrina annetun merkkijonon.
+     */
     public static void tulostaAvaimetJoissa(HashMap<String, String> hajautustaulu, String merkkijono) {
         for (String avain : hajautustaulu.keySet()) {
             if (avain.contains(merkkijono)) {
@@ -32,6 +35,9 @@ public class Ohjelma {
         }
     }
 
+    /**
+     * tulostaa parametrina annetun hajautustaulun ne arvot, joihin liittyvät avaimet sisältävät parametrina annetun merkkijonon.
+     */
     public static void tulostaArvotJosAvaimessa(HashMap<String, String> hajautustaulu, String merkkijono) {
         for (String avain : hajautustaulu.keySet()) {
             if (avain.contains(merkkijono)) {
