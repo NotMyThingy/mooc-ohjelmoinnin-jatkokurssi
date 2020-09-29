@@ -10,7 +10,7 @@ public class Opettaja extends Henkilo {
     @Override
     public String toString() {
         return super.toString() +
-                "\n\t" +
+                "\n  " +
                 "palkka " + palkka + " euroa/kk";
     }
 }

@@ -18,7 +18,7 @@ public class Opiskelija extends Henkilo {
     @Override
     public String toString() {
         return super.toString() +
-                "\n\t" +
+                "\n  " +
                 "opintopisteitä " + opintopisteet;
     }
 }
