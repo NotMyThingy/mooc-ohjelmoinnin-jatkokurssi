@@ -1,38 +1,36 @@
 public class MuistavaTuotevarasto extends Tuotevarasto {
 
-    private final Muutoshistoria muutoshistoria;
+    private final Muutoshistoria historia;
 
     public MuistavaTuotevarasto(String nimi, double tilavuus, double alkuSaldo) {
         super(nimi, tilavuus);
-        this.muutoshistoria = new Muutoshistoria();
+        historia = new Muutoshistoria();
 
-        super.lisaaVarastoon(alkuSaldo);
-        this.muutoshistoria.lisaa(alkuSaldo);
+        lisaaVarastoon(alkuSaldo);
     }
 
     public String historia() {
-        return muutoshistoria.toString();
-    }
-
-    @Override
-    public void lisaaVarastoon(double maara) {
-        super.lisaaVarastoon(maara);
-        muutoshistoria.lisaa(getSaldo());
-    }
-
-    @Override
-    public double otaVarastosta(double maara) {
-        double otettuVarastosta = super.otaVarastosta(maara);
-        muutoshistoria.lisaa(getSaldo());
-
-        return otettuVarastosta;
+        return historia.toString();
     }
 
     public void tulostaAnalyysi() {
         System.out.println("Tuote: " + getNimi());
         System.out.println("Historia: " + historia());
-        System.out.println("Suurin tuotemäärä: " + muutoshistoria.maxArvo());
-        System.out.println("Pienin tuotemäärä: " + muutoshistoria.minArvo());
-        System.out.println("Keskiarvo: " + muutoshistoria.keskiarvo());
+        System.out.println("Suurin tuotemäärä: " + historia.maxArvo());
+        System.out.println("Pienin tuotemäärä: " + historia.minArvo());
+        System.out.println("Keskiarvo: " + historia.keskiarvo());
+    }
+
+    @Override
+    public void lisaaVarastoon(double maara) {
+        super.lisaaVarastoon(maara);
+        historia.lisaa(getSaldo());
+    }
+
+    @Override
+    public double otaVarastosta(double maara) {
+        double mitaSaatiin = super.otaVarastosta(maara);
+        historia.lisaa(getSaldo());
+        return mitaSaatiin;
     }
 }

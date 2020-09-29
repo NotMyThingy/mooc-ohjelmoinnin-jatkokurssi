@@ -4,42 +4,46 @@ import java.util.List;
 
 public class Muutoshistoria {
 
-    private final List<Double> historia;
+    private final List<Double> tilanteet;
 
     public Muutoshistoria() {
-        this.historia = new ArrayList<>();
+        this.tilanteet = new ArrayList<>();
     }
 
     public void lisaa(double tilanne) {
-        historia.add(tilanne);
+        tilanteet.add(tilanne);
     }
 
     public void nollaa() {
-        historia.clear();
+        tilanteet.clear();
     }
 
     public double maxArvo() {
-        if (historia.isEmpty()) {
+        if (tilanteet.isEmpty()) {
             return 0;
         }
 
-        return historia.stream().max(Comparator.comparing(Double::valueOf)).get();
+        return tilanteet.stream().max(Comparator.comparing(Double::valueOf)).get();
     }
 
     public double minArvo() {
-        if (historia.isEmpty()) {
+        if (tilanteet.isEmpty()) {
             return 0;
         }
 
-        return historia.stream().min(Comparator.comparing(Double::valueOf)).get();
+        return tilanteet.stream().min(Comparator.comparing(Double::valueOf)).get();
     }
 
     public double keskiarvo() {
-        return historia.stream().mapToDouble(i -> i).sum() / historia.size();
+        if (tilanteet.isEmpty()) {
+            return 0;
+        }
+
+        return tilanteet.stream().mapToDouble(i -> i).sum() / tilanteet.size();
     }
 
     @Override
     public String toString() {
-        return historia.toString();
+        return tilanteet.toString();
     }
 }
