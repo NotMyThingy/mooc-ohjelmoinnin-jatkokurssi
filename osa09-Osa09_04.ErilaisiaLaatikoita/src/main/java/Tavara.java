@@ -1,3 +1,4 @@
+import java.util.Objects;
 
 public class Tavara {
 
@@ -21,4 +22,16 @@ public class Tavara {
         return paino;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tavara tavara = (Tavara) o;
+        return nimi.equals(tavara.nimi);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nimi);
+    }
 }

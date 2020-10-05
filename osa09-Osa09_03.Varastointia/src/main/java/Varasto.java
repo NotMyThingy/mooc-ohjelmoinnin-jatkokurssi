@@ -2,15 +2,11 @@
 
 public class Varasto {
 
-    private double tilavuus;
+    private final double tilavuus;
     private double saldo;
 
     public Varasto(double tilavuus) {
-        if (tilavuus > 0.0) {
-            this.tilavuus = tilavuus;
-        } else {
-            this.tilavuus = 0.0;
-        }
+        this.tilavuus = Math.max(tilavuus, 0.0);
 
         this.saldo = 0.0;
     }

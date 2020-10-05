@@ -1,9 +1,10 @@
+import java.util.Objects;
 
 public class Paivays {
 
-    private int paiva;
-    private int kuukausi;
-    private int vuosi;
+    private final int paiva;
+    private final int kuukausi;
+    private final int vuosi;
 
     public Paivays(int paiva, int kuukausi, int vuosi) {
         this.paiva = paiva;
@@ -26,29 +27,23 @@ public class Paivays {
             return true;
         }
 
-        if (this.vuosi == verrattava.vuosi
+        return this.vuosi == verrattava.vuosi
                 && this.kuukausi == verrattava.kuukausi
-                && this.paiva < verrattava.paiva) {
-            return true;
-        }
-
-        return false;
+                && this.paiva < verrattava.paiva;
     }
 
-    public int erotusVuosissa(Paivays verrattava) {
-        if (aiemmin(verrattava)) {
-            return verrattava.erotusVuosissa(this);
-        }
-
-        int vuosiPois = 0;
-
-        if (this.kuukausi < verrattava.kuukausi) {
-            vuosiPois = 1;
-        } else if (this.kuukausi == verrattava.kuukausi && this.paiva < verrattava.paiva) {
-            vuosiPois = 1;
-        }
-
-        return this.vuosi - verrattava.vuosi - vuosiPois;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paivays paivays = (Paivays) o;
+        return paiva == paivays.paiva &&
+                kuukausi == paivays.kuukausi &&
+                vuosi == paivays.vuosi;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(paiva, kuukausi, vuosi);
+    }
 }
