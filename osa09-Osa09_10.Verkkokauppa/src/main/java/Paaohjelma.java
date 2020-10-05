@@ -6,11 +6,14 @@ public class Paaohjelma {
         // tee tänne testikoodia
         Varasto varasto = new Varasto();
         varasto.lisaaTuote("maito", 3, 10);
-        varasto.lisaaTuote("kahvi", 5, 7);
+        varasto.lisaaTuote("kahvi", 5, 6);
+        varasto.lisaaTuote("piima", 2, 20);
+        varasto.lisaaTuote("jugurtti", 2, 20);
 
-        System.out.println("hinnat:");
-        System.out.println("maito: " + varasto.hinta("maito"));
-        System.out.println("kahvi: " + varasto.hinta("kahvi"));
-        System.out.println("sokeri: " + varasto.hinta("sokeri"));
+        System.out.println("tuotteet:");
+
+        for (String tuote : varasto.tuotteet()) {
+            System.out.println(tuote);
+        }
     }
 }
