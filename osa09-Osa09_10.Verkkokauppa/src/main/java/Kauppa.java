@@ -27,10 +27,7 @@ public class Kauppa {
                 break;
             }
 
-            // tee tänne koodi joka lisää tuotteen ostoskoriin jos sitä on varastossa
-            // ja vähentää varastosaldoa
-            // älä koske muuhun koodiin!
-            if(!varasto.ota(tuote)) {
+            if (!varasto.ota(tuote)) {
                 continue;
             }
 
