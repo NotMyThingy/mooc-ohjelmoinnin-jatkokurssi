@@ -1,13 +1,13 @@
 public abstract class Elain {
 
-    private String nimi;
+    private final String nimi;
 
     public Elain(String nimi) {
         this.nimi = nimi;
     }
 
     public void syo() {
-        System.out.printf(nimi + " syo");
+        System.out.println(nimi + " syo");
     }
 
     public void nuku() {
