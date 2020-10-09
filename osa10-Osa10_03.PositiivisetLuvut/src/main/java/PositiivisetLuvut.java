@@ -9,20 +9,17 @@ public class PositiivisetLuvut {
     public static void main(String[] args) {
         Scanner lukija = new Scanner(System.in);
 
-        List<Integer> lista = new ArrayList<>();
-        lista.add(3);
-        lista.add(7);
-        lista.add(-4);
-        lista.add(2);
-        lista.add(6);
+        List<Integer> luvut = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            luvut.add(i);
+        }
 
-        System.out.println(positiiviset(lista));
+        long lukuja = luvut.stream()
+                .filter(i -> i < 4)
+                .map(i -> i * 2)
+                .filter(i -> i > 10)
+                .count();
+
+        System.out.println("Lukuja oli: " + lukuja);
     }
-
-    public static List<Integer> positiiviset(List<Integer> luvut) {
-        return luvut.stream()
-                .filter(i -> i > 0)
-                .collect(Collectors.toList());
-    }
-
 }
