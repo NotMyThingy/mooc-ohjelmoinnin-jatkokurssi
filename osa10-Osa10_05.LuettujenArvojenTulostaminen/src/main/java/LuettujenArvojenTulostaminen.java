@@ -19,7 +19,6 @@ public class LuettujenArvojenTulostaminen {
             luetut.add(luettu);
         }
 
-        luetut.stream()
-                .forEach(luku -> System.out.println(luku));
+        luetut.forEach(System.out::println);
     }
 }
