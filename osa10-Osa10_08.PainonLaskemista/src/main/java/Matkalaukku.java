@@ -20,22 +20,14 @@ public class Matkalaukku {
     }
 
     public int yhteispaino() {
-        int summa = 0;
-        int indeksi = 0;
-        while (indeksi < this.tavarat.size()) {
-        summa += this.tavarat.get(indeksi).getPaino();
-        indeksi++;
-        }
-        return summa;
+        return this.tavarat.stream()
+                .mapToInt(Tavara::getPaino)
+                .sum();
     }
 
     public void tulostaTavarat() {
-        int indeksi = 0;
-        while (indeksi < this.tavarat.size()) {
-        Tavara t = this.tavarat.get(indeksi);
-        System.out.println(t);
-        indeksi++;
-        }
+        this.tavarat.stream()
+                .forEach(System.out::println);
     }
 
     public Tavara raskainTavara() {
