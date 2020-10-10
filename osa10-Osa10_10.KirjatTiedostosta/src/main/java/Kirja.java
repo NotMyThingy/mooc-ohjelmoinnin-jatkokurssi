@@ -29,4 +29,13 @@ public class Kirja {
         return sivuja;
     }
 
+    @Override
+    public String toString() {
+        return "Kirja{" +
+                "nimi='" + nimi + '\'' +
+                ", julkaisuvuosi=" + julkaisuvuosi +
+                ", sivuja=" + sivuja +
+                ", kirjoittaja='" + kirjoittaja + '\'' +
+                '}';
+    }
 }
