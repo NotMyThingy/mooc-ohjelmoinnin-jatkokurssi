@@ -1,10 +1,10 @@
 
 public class Kirja {
 
-    private String nimi;
-    private int julkaisuvuosi;
-    private int sivuja;
-    private String kirjoittaja;
+    private final String nimi;
+    private final int julkaisuvuosi;
+    private final int sivuja;
+    private final String kirjoittaja;
 
     public Kirja(String nimi, int julkaisuvuosi, int sivuja, String kirjoittaja) {
         this.nimi = nimi;
