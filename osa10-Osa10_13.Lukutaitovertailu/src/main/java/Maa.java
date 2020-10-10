@@ -23,12 +23,6 @@ public class Maa implements Comparable<Maa> {
 
     @Override
     public int compareTo(Maa verrattava) {
-        if (this.lukutaitoprosentti == verrattava.getLukutaitoprosentti()) {
-            return 0;
-        }
-        if (this.lukutaitoprosentti > verrattava.getLukutaitoprosentti()) {
-            return 1;
-        }
-        return -1;
+        return Double.compare(this.lukutaitoprosentti, verrattava.getLukutaitoprosentti());
     }
 }
