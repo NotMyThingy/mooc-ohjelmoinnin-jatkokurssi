@@ -21,21 +21,14 @@ public class Lastiruuma {
     }
 
     public int yhteispaino() {
-        int summa = 0;
-        int indeksi = 0;
-        while (indeksi < this.matkalaukut.size()) {
-        summa += this.matkalaukut.get(indeksi).yhteispaino();
-        indeksi++;
-        }
-        return summa;
+        return this.matkalaukut.stream()
+                .mapToInt(Matkalaukku::yhteispaino)
+                .sum();
     }
 
     public void tulostaTavarat() {
-        int indeksi = 0;
-        while (indeksi < this.matkalaukut.size()) {
-        this.matkalaukut.get(indeksi).tulostaTavarat();
-        indeksi++;
-        }
+        this.matkalaukut.stream()
+                .forEach(Matkalaukku::tulostaTavarat);
     }
 
     @Override

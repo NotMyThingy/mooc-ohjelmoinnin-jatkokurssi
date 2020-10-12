@@ -1,5 +1,5 @@
 
-public class Ihminen {
+public class Ihminen implements Comparable<Ihminen> {
 
     private int palkka;
     private String nimi;
@@ -21,5 +21,10 @@ public class Ihminen {
     @Override
     public String toString() {
         return nimi + " " + palkka;
+    }
+
+    @Override
+    public int compareTo(Ihminen verrattava) {
+        return verrattava.getPalkka() - this.palkka;
     }
 }

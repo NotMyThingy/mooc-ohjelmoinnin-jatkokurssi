@@ -1,9 +1,9 @@
 
 
-public class Kortti {
+public class Kortti implements Comparable<Kortti> {
 
-    private int arvo;
-    private Maa maa;
+    private final int arvo;
+    private final Maa maa;
 
     public Kortti(int arvo, Maa maa) {
         if (arvo < 2 || arvo > 14) {
@@ -17,7 +17,7 @@ public class Kortti {
     @Override
     public String toString() {
         String kortinArvo = "" + arvo;
-        if(arvo == 11) {
+        if (arvo == 11) {
             kortinArvo = "J";
         } else if (arvo == 12) {
             kortinArvo = "Q";
@@ -26,7 +26,7 @@ public class Kortti {
         } else if (arvo == 14) {
             kortinArvo = "A";
         }
-        
+
         return maa + " " + kortinArvo;
     }
 
@@ -38,4 +38,15 @@ public class Kortti {
         return maa;
     }
 
+    @Override
+    public int compareTo(Kortti verrattava) {
+        if (this.arvo > verrattava.getArvo()) {
+            return 1;
+        }
+        if (this.arvo < verrattava.getArvo()) {
+            return -1;
+        }
+
+        return this.maa.ordinal() - verrattava.getMaa().ordinal();
+    }
 }

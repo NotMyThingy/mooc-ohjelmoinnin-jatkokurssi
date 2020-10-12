@@ -9,7 +9,7 @@ public class UniikitSukunimet {
         Scanner lukija = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Syötetäänkö henkilöiden tietoja, \"loppu\" lopettaa:");
+            System.out.print("Syötetäänkö henkilöiden tietoja, \"loppu\" lopettaa: ");
             String jatketaan = lukija.nextLine();
 
             if (jatketaan.equals("loppu")) {
@@ -21,12 +21,17 @@ public class UniikitSukunimet {
             System.out.print("Syötä sukunimi: ");
             String sukunimi = lukija.nextLine();
             System.out.print("Syötä syntymävuosi: ");
-            int syntymavuosi = Integer.valueOf(lukija.nextLine());
+            int syntymavuosi = Integer.parseInt(lukija.nextLine());
 
             henkilot.add(new Henkilo(etunimi, sukunimi, syntymavuosi));
-            System.out.println("");
+            System.out.println();
         }
 
-        // toteuta uniikkien sukunimien tulostaminen aakkosjärjestyksessä tänne
+        System.out.println("\nUniikit sukunimet aakkosjärjestyksessä:");
+        henkilot.stream()
+                .map(Henkilo::getSukunimi)
+                .distinct()
+                .sorted()
+                .forEach(System.out::println);
     }
 }
