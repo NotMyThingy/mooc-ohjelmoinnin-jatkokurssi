@@ -1,6 +1,6 @@
-import java.util.ArrayList;
+import java.util.List;
 
 public class C extends B implements IC {
 
-    private ArrayList<E> eet;
+    private List<E> eet;
 }
