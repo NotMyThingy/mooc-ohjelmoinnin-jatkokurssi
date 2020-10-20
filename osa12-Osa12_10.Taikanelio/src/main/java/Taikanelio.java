@@ -4,7 +4,7 @@ import java.util.Collections;
 
 public class Taikanelio {
 
-    private int[][] nelio;
+    private final int[][] nelio;
 
     // valmis konstruktori
     public Taikanelio(int koko) {
