@@ -17,15 +17,45 @@ public class Taikanelio {
 
     // toteuta nämä kolme metodia
     public ArrayList<Integer> rivienSummat() {
-        return new ArrayList<>();
+        ArrayList<Integer> summat = new ArrayList<>();
+        for (int[] rivi : this.nelio) {
+            int summa = 0;
+            for (int luku : rivi) {
+                summa += luku;
+            }
+            summat.add(summa);
+        }
+        return summat;
     }
 
     public ArrayList<Integer> sarakkeidenSummat() {
-        return new ArrayList<>();
+        ArrayList<Integer> summat = new ArrayList<>();
+
+        for (int i = 0; i < this.nelio.length; i++) {
+            int summa = 0;
+            for (int j = 0; j < this.nelio[i].length; j++) {
+                summa += this.nelio[j][i];
+            }
+            summat.add(summa);
+        }
+        return summat;
     }
 
     public ArrayList<Integer> lavistajienSummat() {
-        return new ArrayList<>();
+        ArrayList<Integer> summat = new ArrayList<>();
+        int vasemmaltaAlas = 0;
+        int vasemmaltaYlos = 0;
+        int viimeinenIndeksi = this.nelio.length - 1;
+
+        for (int i = 0; i < this.nelio.length; i++) {
+            vasemmaltaAlas += this.nelio[i][i];
+            vasemmaltaYlos += this.nelio[i][viimeinenIndeksi - i];
+        }
+
+        summat.add(vasemmaltaAlas);
+        summat.add(vasemmaltaYlos);
+
+        return summat;
     }
 
     // valmiit apumetodit -- älä koske näihin
@@ -78,7 +108,7 @@ public class Taikanelio {
 
     public int annaArvo(int x, int y) {
         if (x < 0 || y < 0 || x >= getLeveys() || y >= getKorkeus()) {
-            return - 1;
+            return -1;
         }
 
         return this.nelio[y][x];
