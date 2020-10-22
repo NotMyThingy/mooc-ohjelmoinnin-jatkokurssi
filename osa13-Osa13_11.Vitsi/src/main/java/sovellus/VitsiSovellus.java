@@ -1,9 +1,10 @@
 package sovellus;
 
+import javafx.application.Application;
+
 public class VitsiSovellus {
 
-
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Application.launch(VitsiUI.class);
     }
 }
