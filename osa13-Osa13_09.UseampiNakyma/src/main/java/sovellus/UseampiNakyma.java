@@ -1,9 +1,10 @@
 package sovellus;
 
+import javafx.application.Application;
+
 public class UseampiNakyma {
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Application.launch(Nakymat.class);
     }
-
 }
