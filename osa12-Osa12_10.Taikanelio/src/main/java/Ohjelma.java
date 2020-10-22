@@ -5,6 +5,7 @@ public class Ohjelma {
         // Testaa Taikanelio-luokkaasi täällä
 
         Taikaneliotehdas tt = new Taikaneliotehdas();
-        System.out.println(tt.luoTaikanelio(5));
+        System.out.println(tt.luoTaikanelio(3));
+
     }
 }

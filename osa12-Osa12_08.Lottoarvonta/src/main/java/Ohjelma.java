@@ -11,6 +11,6 @@ public class Ohjelma {
         for (Integer numero : lottonumerot) {
             System.out.print(numero + " ");
         }
-        System.out.println("");
+        System.out.println();
     }
 }

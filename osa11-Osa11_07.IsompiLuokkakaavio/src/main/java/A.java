@@ -1,2 +1,2 @@
-public class A implements IA{
+public class A implements IA {
 }
