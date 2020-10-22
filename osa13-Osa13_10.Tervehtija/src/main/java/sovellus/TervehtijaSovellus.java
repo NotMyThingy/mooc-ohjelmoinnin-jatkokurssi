@@ -1,9 +1,10 @@
 package sovellus;
 
+import javafx.application.Application;
+
 public class TervehtijaSovellus {
 
-
     public static void main(String[] args) {
-        System.out.println("Hellow world!");
+        Application.launch(Tervehtija.class);
     }
 }
