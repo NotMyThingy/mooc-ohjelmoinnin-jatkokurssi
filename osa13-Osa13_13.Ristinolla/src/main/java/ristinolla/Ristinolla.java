@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class Ristinolla {
 
 	private String vuoro;
-	private String[][] ristinolla;
+	private final String[][] ristinolla;
 
 	public Ristinolla() {
 		this.vuoro = "X";
@@ -63,8 +63,8 @@ public class Ristinolla {
 				{2, 5, 6}
 		};
 
-		for (int i = 0; i < samat.length; i++) {
-			if (tablesMatch(samat[i])) {
+		for (int[] vals : samat) {
+			if (tablesMatch(vals)) {
 				return true;
 			}
 		}
