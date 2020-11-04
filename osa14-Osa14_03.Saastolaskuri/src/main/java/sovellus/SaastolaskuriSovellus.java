@@ -1,8 +1,6 @@
 package sovellus;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -16,16 +14,106 @@ import javafx.stage.Stage;
 
 public class SaastolaskuriSovellus extends Application {
 
-	private LineChart lineChart;
-
 	@Override
 	public void start(Stage stage) {
 		BorderPane layout = new BorderPane();
 
-		VBox controls = createControls();
-		layout.setTop(controls);
+		/**
+		 * Liukurit
+		 */
+		VBox controls = new VBox();
 
-		lineChart = creteNewChart();
+		BorderPane investmentsPane = new BorderPane();
+		BorderPane interestsPane = new BorderPane();
+
+		/**
+		 * YLEMPI LIUKURI
+		 */
+		final Slider amoutSlider = new Slider(25, 250, 25);
+		amoutSlider.setShowTickMarks(true);
+		amoutSlider.setShowTickLabels(true);
+		amoutSlider.setPadding(new Insets(10));
+
+		Label depositLeftLabel = new Label("Kuukausittainen tallennus");
+		Label depositRightLabel = new Label(String.valueOf(amoutSlider.getValue()));
+
+		depositLeftLabel.setPadding(new Insets(10));
+		depositRightLabel.setPadding(new Insets(10));
+
+		/**
+		 * ALEMPI LIUKURI
+		 */
+		final Slider interestSlider = new Slider(0, 10, 0);
+		interestSlider.setShowTickMarks(true);
+		interestSlider.setShowTickLabels(true);
+		interestSlider.setPadding(new Insets(10));
+
+		Label interestLeftLabel = new Label("Vuosittainen korko");
+		Label interestRightLabel = new Label("0.0");
+
+		interestLeftLabel.setPadding(new Insets(10));
+		interestRightLabel.setPadding(new Insets(10));
+
+		/**
+		 * KOMPONENTIT BOXIIN
+		 */
+		investmentsPane.setLeft(depositLeftLabel);
+		investmentsPane.setCenter(amoutSlider);
+		investmentsPane.setRight(depositRightLabel);
+
+		interestsPane.setLeft(interestLeftLabel);
+		interestsPane.setCenter(interestSlider);
+		interestsPane.setRight(interestRightLabel);
+
+		controls.setPadding(new Insets(15));
+		controls.getChildren().addAll(investmentsPane, interestsPane);
+
+		/**
+		 * VIIVAKAAVIO
+		 */
+		NumberAxis xAxis = new NumberAxis(0, 30, 1);
+		NumberAxis yAxis = new NumberAxis();
+
+		LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+		lineChart.setAnimated(false);
+		lineChart.setTitle("Säästölaskuri");
+
+		/**
+		 * LIUKUREIDEN TOIMINNALLISUUS
+		 */
+		XYChart.Series depositSeries = new XYChart.Series();
+		amoutSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+			depositRightLabel.setText(String.valueOf(newValue.intValue()));
+
+			lineChart.getData().remove(depositSeries);
+			depositSeries.getData().clear();
+			for (int year = 0; year <= 30; year++) {
+				depositSeries.getData().add(year, new XYChart.Data(year, (newValue.intValue() * 12) * year));
+			}
+			lineChart.getData().add(depositSeries);
+		});
+
+		XYChart.Series interestSeries = new XYChart.Series();
+		interestSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+			interestRightLabel.setText(String.format("%.2f", newValue.doubleValue()));
+
+			lineChart.getData().remove(interestSeries);
+			interestSeries.getData().clear();
+
+			double paaoma = 0;
+			int talletus = (int) amoutSlider.getValue();
+			for (int year = 0; year <= 30; year++) {
+				interestSeries.getData().add(new XYChart.Data(year, paaoma));
+				System.out.println("Vuosi: " + year + " - Kertyma: " + paaoma);
+				paaoma = (paaoma + (talletus * 12)) * (newValue.doubleValue() / 100 + 1);
+			}
+			lineChart.getData().add(interestSeries);
+		});
+		/**
+		 * KOMPONENTIT ALUSTAAN
+		 */
+
+		layout.setTop(controls);
 		layout.setCenter(lineChart);
 
 		Scene scene = new Scene(layout, 640, 480);
@@ -34,98 +122,28 @@ public class SaastolaskuriSovellus extends Application {
 		stage.show();
 	}
 
-	/**
-	 * LUODAAN KONTROLLIT
+
+	/*
+
+
 	 */
-	private VBox createControls() {
-		VBox controls = new VBox();
-		controls.setPadding(new Insets(15));
-
-		BorderPane topPane = createDepositSlider();
-		BorderPane bottomPane = createInterestSlider();
-
-		controls.getChildren().addAll(topPane, bottomPane);
-
-		return controls;
-	}
-
-	/**
-	 * YLEMPI LIUKUVALITSIN TALLETUKSELLE
-	 */
-	private BorderPane createDepositSlider() {
-		BorderPane topPane = new BorderPane();
-
-		Slider amoutSlider = new Slider(25, 250, 25);
-		amoutSlider.setShowTickMarks(true);
-		amoutSlider.setShowTickLabels(true);
-		amoutSlider.setPadding(new Insets(10));
-
-		Label depositLeft = new Label("Kuukausittainen tallennus");
-		Label depositRight = new Label(String.valueOf(amoutSlider.getValue()));
-
-		depositLeft.setPadding(new Insets(10));
-		depositRight.setPadding(new Insets(10));
-
-		topPane.setLeft(depositLeft);
-		topPane.setCenter(amoutSlider);
-		topPane.setRight(depositRight);
-
-		amoutSlider.valueProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number oldie, Number newbie) {
-				depositRight.setText(String.format("%.1f", newbie.doubleValue()));
-
-				XYChart.Series data = new XYChart.Series();
-				for (int i = 0; i < 30; i++) {
-					data.getData().add(newbie.intValue() * 12);
-				}
-
-				lineChart.getData().add(data);
-
-			}
-		});
-
-		return topPane;
-	}
 
 	/**
 	 * ALEMPI LIUKUVALITSIN KOROLLE
-	 */
+	 *//*
 	private BorderPane createInterestSlider() {
 		BorderPane bottomPane = new BorderPane();
 
-		Slider interestSlider = new Slider(0, 10, 0);
-		interestSlider.setShowTickMarks(true);
-		interestSlider.setShowTickLabels(true);
-		interestSlider.setPadding(new Insets(10));
 
-		Label interestLeft = new Label("Vuosittainen korko");
-		Label interestRight = new Label("0.0");
+		interestSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+			interestRight.setText(String.format("%.2f", interestSlider.getValue()));
 
-		interestLeft.setPadding(new Insets(10));
-		interestRight.setPadding(new Insets(10));
 
-		bottomPane.setLeft(interestLeft);
-		bottomPane.setCenter(interestSlider);
-		bottomPane.setRight(interestRight);
+		});
 
-		interestSlider.valueProperty().addListener((event) -> interestRight.setText(String.format("%.2f", interestSlider.getValue())));
 		return bottomPane;
 	}
-
-	/**
-	 * LUODAAN KAAVIO
-	 */
-	private LineChart creteNewChart() {
-		NumberAxis xAxis = new NumberAxis(0, 30, 1);
-		NumberAxis yAxis = new NumberAxis();
-
-		LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setTitle("Säästölaskuri");
-
-		return lineChart;
-	}
-
+*/
 	public static void main(String[] args) {
 		Application.launch();
 	}
