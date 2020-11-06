@@ -1,6 +1,7 @@
 package sovellus;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -14,20 +15,27 @@ import javafx.stage.Stage;
 
 public class SaastolaskuriSovellus extends Application {
 
-	private LineChart lineChart;
-	private int monthlyInvestment;
+	private LineChart<Number, Number> lineChart;
+	private Slider depositSlider;
 
 	@Override
 	public void start(Stage stage) {
 		BorderPane layout = new BorderPane();
 
-		VBox controls = createControls();
-		layout.setTop(controls);
+		NumberAxis xAxis = new NumberAxis(0, 30, 1);
+		NumberAxis yAxis = new NumberAxis();
 
-		lineChart = creteNewChart();
+		lineChart = new LineChart<>(xAxis, yAxis);
+		lineChart.setAnimated(false);
+		lineChart.setLegendVisible(false);
+		lineChart.setTitle("Säästölaskuri");
+
+		VBox controls = createControls();
+
+		layout.setTop(controls);
 		layout.setCenter(lineChart);
 
-		Scene scene = new Scene(layout, 640, 480);
+		Scene scene = new Scene(layout);
 
 		stage.setScene(scene);
 		stage.show();
@@ -38,7 +46,7 @@ public class SaastolaskuriSovellus extends Application {
 		final VBox controls = new VBox();
 		controls.setPadding(new Insets(15));
 
-		final BorderPane topPane = createInvestmentSlider();
+		final BorderPane topPane = createDepositSlider();
 		final BorderPane bottomPane = createInterestSlider();
 
 		controls.getChildren().addAll(topPane, bottomPane);
@@ -47,92 +55,96 @@ public class SaastolaskuriSovellus extends Application {
 	}
 
 
-	private BorderPane createInvestmentSlider() {
-		final BorderPane investmentPane = new BorderPane();
+	private BorderPane createDepositSlider() {
+		final BorderPane depositPane = new BorderPane();
 
-		final Slider investment = new Slider(25, 250, 25);
-		investment.setShowTickMarks(true);
-		investment.setShowTickLabels(true);
-		investment.setPadding(new Insets(10));
+		depositSlider = new Slider(25, 250, 25);
+		depositSlider.setShowTickMarks(true);
+		depositSlider.setShowTickLabels(true);
+		depositSlider.setPadding(new Insets(10));
 
 		final Label depositLeftLabel = new Label("Kuukausittainen tallennus");
-		final Label depositRightLabel = new Label(String.valueOf(investment.getValue()));
+		final Label depositRightLabel = new Label();
+		depositRightLabel.textProperty().bind(Bindings
+				.format("%.0f", depositSlider.valueProperty()));
 
-		depositLeftLabel.setPadding(new Insets(10));
-		depositRightLabel.setPadding(new Insets(10));
+		setStyling(depositPane, depositSlider, depositLeftLabel, depositRightLabel);
 
-		investmentPane.setLeft(depositLeftLabel);
-		investmentPane.setCenter(investment);
-		investmentPane.setRight(depositRightLabel);
+		final XYChart.Series<Number, Number> depositSeries = new XYChart.Series<>();
+		depositSeries.setName("Monthly deposit");
 
-		final XYChart.Series depositSeries = new XYChart.Series();
-		investment.valueProperty().addListener((observableValue, oldValue, newValue) -> {
-			monthlyInvestment = newValue.intValue();
-			depositRightLabel.setText(String.valueOf(newValue.intValue()));
+		this.lineChart.getData().add(depositSeries);
 
-			lineChart.getData().remove(depositSeries);
+		/*
+		 * SLIDER EVENT LISTENER
+		 */
+		depositSlider.setOnMouseReleased((event) -> {
 			depositSeries.getData().clear();
 			for (int year = 0; year <= 30; year++) {
-				depositSeries.getData().add(year, new XYChart.Data(year, (monthlyInvestment * 12) * year));
+				depositSeries
+						.getData()
+						.add(new XYChart.Data<>(year, (depositSlider.valueProperty().intValue() * 12) * year));
 			}
-			lineChart.getData().add(depositSeries);
 		});
 
-		return investmentPane;
+		return depositPane;
 	}
 
 
 	private BorderPane createInterestSlider() {
 		final BorderPane interestPane = new BorderPane();
 
-		final Slider interest = new Slider(0, 10, 0);
-		interest.setShowTickMarks(true);
-		interest.setShowTickLabels(true);
-		interest.setPadding(new Insets(10));
+		final Slider interestSlider = new Slider(0, 10, 0);
+		interestSlider.setShowTickMarks(true);
+		interestSlider.setShowTickLabels(true);
+		interestSlider.setPadding(new Insets(10));
 
 		final Label interestLeftLabel = new Label("Vuosittainen korko");
-		final Label interestRightLabel = new Label("0.0");
+		final Label interestRightLabel = new Label();
+		interestRightLabel.textProperty().bind(Bindings
+				.format("%.2f", interestSlider.valueProperty()));
 
-		interestLeftLabel.setPadding(new Insets(10));
-		interestRightLabel.setPadding(new Insets(10));
+		setStyling(interestPane, interestSlider, interestLeftLabel, interestRightLabel);
 
-		interestPane.setLeft(interestLeftLabel);
-		interestPane.setCenter(interest);
-		interestPane.setRight(interestRightLabel);
+		final XYChart.Series<Number, Number> interestSeries = new XYChart.Series<>();
+		interestSeries.setName("Annual interest");
 
-		final XYChart.Series interestSeries = new XYChart.Series();
-		interest.valueProperty().addListener((observableValue, oldValue, newValue) -> {
-			interestRightLabel.setText(String.format("%.2f", newValue.doubleValue()));
+		this.lineChart.getData().add(interestSeries);
 
-			lineChart.getData().remove(interestSeries);
+		/*
+		 * SLIDER EVENT LISTENER
+		 */
+		interestSlider.setOnMouseReleased((event) -> {
 			interestSeries.getData().clear();
 
+			double annualInterest = interestSlider.valueProperty().doubleValue() / 100 + 1;
+			double annualDeposit = depositSlider.valueProperty().intValue() * 12;
 			double savings = 0.0;
-			for (int year = 0; year <= 30; year++) {
-				interestSeries.getData().add(new XYChart.Data(year, savings));
-				savings = (savings + (monthlyInvestment * 12)) * (newValue.doubleValue() / 100 + 1);
-			}
-			interestSeries.getData().stream().forEach(i -> System.out.println(i));
 
-			lineChart.getData().add(interestSeries);
+			for (int year = 0; year <= 30; year++) {
+				interestSeries
+						.getData()
+						.add(new XYChart.Data<>(year, savings));
+
+				savings = (savings + annualDeposit) * annualInterest;
+			}
 		});
 
 		return interestPane;
 	}
 
-	private LineChart<Number, Number> creteNewChart() {
-		NumberAxis xAxis = new NumberAxis(0, 30, 1);
-		NumberAxis yAxis = new NumberAxis();
 
-		LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setAnimated(false);
-		lineChart.setTitle("Säästölaskuri");
+	private void setStyling(BorderPane pane, Slider slider, Label labelL, Label labelR) {
+		labelL.setPadding(new Insets(10));
+		labelR.setPadding(new Insets(10));
 
-		return lineChart;
+		pane.setLeft(labelL);
+		pane.setCenter(slider);
+		pane.setRight(labelR);
 	}
 
 
 	public static void main(String[] args) {
-		Application.launch();
+		launch(SaastolaskuriSovellus.class);
 	}
 }
