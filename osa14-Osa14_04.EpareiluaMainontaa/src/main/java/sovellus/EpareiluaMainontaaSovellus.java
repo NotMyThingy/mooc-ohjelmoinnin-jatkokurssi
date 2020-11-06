@@ -13,8 +13,9 @@ public class EpareiluaMainontaaSovellus extends Application {
     @Override
     public void start(Stage ikkuna) {
         CategoryAxis xAkseli = new CategoryAxis();
-        NumberAxis yAkseli = new NumberAxis(77.0, 77.5, 0.1);
-        yAkseli.setTickLabelsVisible(false);
+        NumberAxis yAkseli = new NumberAxis(75.0, 78, 0.5);
+        yAkseli.setTickLabelsVisible(true);
+        yAkseli.setTickMarkVisible(true);
         yAkseli.setLabel("Suurempi parempi!");
 
         BarChart<String, Number> pylvaskaavio = new BarChart<>(xAkseli, yAkseli);
