@@ -20,42 +20,40 @@ public class SaastolaskuriSovellus extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		BorderPane layout = new BorderPane();
+		final BorderPane layout = new BorderPane();
 
-		NumberAxis xAxis = new NumberAxis(0, 30, 1);
-		NumberAxis yAxis = new NumberAxis();
+		final NumberAxis xAxis = new NumberAxis(0, 30, 1);
+		final NumberAxis yAxis = new NumberAxis();
 
 		lineChart = new LineChart<>(xAxis, yAxis);
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
 		lineChart.setTitle("Säästölaskuri");
 
-		VBox controls = createControls();
-
+		final VBox controls = controls();
 		layout.setTop(controls);
 		layout.setCenter(lineChart);
 
-		Scene scene = new Scene(layout);
+		final Scene scene = new Scene(layout, 640, 480);
 
 		stage.setScene(scene);
 		stage.show();
 	}
 
 
-	private VBox createControls() {
+	private VBox controls() {
 		final VBox controls = new VBox();
+		final BorderPane topPane = topPane();
+		final BorderPane bottomPane = bottomPane();
+
 		controls.setPadding(new Insets(15));
-
-		final BorderPane topPane = createDepositSlider();
-		final BorderPane bottomPane = createInterestSlider();
-
 		controls.getChildren().addAll(topPane, bottomPane);
 
 		return controls;
 	}
 
 
-	private BorderPane createDepositSlider() {
+	private BorderPane topPane() {
 		final BorderPane depositPane = new BorderPane();
 
 		depositSlider = new Slider(25, 250, 25);
@@ -72,7 +70,6 @@ public class SaastolaskuriSovellus extends Application {
 
 		final XYChart.Series<Number, Number> depositSeries = new XYChart.Series<>();
 		depositSeries.setName("Monthly deposit");
-
 		this.lineChart.getData().add(depositSeries);
 
 		/*
@@ -91,7 +88,7 @@ public class SaastolaskuriSovellus extends Application {
 	}
 
 
-	private BorderPane createInterestSlider() {
+	private BorderPane bottomPane() {
 		final BorderPane interestPane = new BorderPane();
 
 		final Slider interestSlider = new Slider(0, 10, 0);
@@ -108,7 +105,6 @@ public class SaastolaskuriSovellus extends Application {
 
 		final XYChart.Series<Number, Number> interestSeries = new XYChart.Series<>();
 		interestSeries.setName("Annual interest");
-
 		this.lineChart.getData().add(interestSeries);
 
 		/*
@@ -145,6 +141,7 @@ public class SaastolaskuriSovellus extends Application {
 
 
 	public static void main(String[] args) {
+		System.out.println("Hello world!");
 		launch(SaastolaskuriSovellus.class);
 	}
 }
